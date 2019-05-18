@@ -2,10 +2,10 @@
 
 #### 由上到下的类加载器：
 
-启动类加载器（Bootstrap ClassLoader）
-扩展类加载器（Extension ClassLoader）
-应用类加载器（Application ClassLoader）
-自定义类加载器
+- 启动类加载器（Bootstrap ClassLoader）
+- 扩展类加载器（Extension ClassLoader）
+- 应用类加载器（Application ClassLoader）
+- 自定义类加载器
 
 双亲委派模型的本质：确保所在层级的类被正确加载（最终实现的统一）
 
