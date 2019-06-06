@@ -53,7 +53,7 @@ volatile和synchronized都可以保证多线程操作的【有序性】，volati
 
 # 垃圾回收（GC）机制
 
-【待续】
+【待续】123
 
 
 
