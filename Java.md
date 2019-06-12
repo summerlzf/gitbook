@@ -53,7 +53,21 @@ volatile和synchronized都可以保证多线程操作的【有序性】，volati
 
 # 垃圾回收（GC）机制
 
-【待续】123
+有关GC的讨论，以目前市面上使用最广泛的Java虚拟机——HotSpot VM为例进行说明，如果没有特殊说明，其都为HotSpot VM的特性
+
+堆（Heap）是JVM进行垃圾回收的主要场所，其次的场所是方法区
+
+JVM将堆分为新生代（Young Generation）和老年代（Old Generation），而新生代又分为：Eden区、From Survivor区、To Survivor区，Eden区占据较大的内存区域；当GC发生时，会将Eden和From Survivor中存活的对象复制到To Survivor区，然后清理Eden和From Survivor区
+
+- 新生代（Young Generation）：所有新创建的对象都是用新生代分配内存，Eden空间不足时，会触发Minor GC，把存活对象转移到Survivor中去
+- 老年代（Old Generation）：用于存放经过多次Minor GC后依然存活的对象，这些对象有存活时间长、比较稳定等特点
+- 永久代（Perm Generation）：堆中的方法区在GC内存划分中通常被称为永久代，其中保存的对象一般不会被回收
+
+### 垃圾回收算法
+
+1. Mark-Sweep（标记-清除）算法：最基础的垃圾回收算法，思路简单，容易实现；算法分为两个阶段：标记阶段和清除阶段，标记阶段主要标记需要被回收的对象，清除阶段就是回收被标记的对象所占用的内存空间；缺点是会产生内存碎片，太多的内存碎片会导致后续需要分配大对象时找不到足够的空间，从而触发新的垃圾回收动作
+2. Copying（复制）算法：用于解决Mark-Sweep算法的缺陷，将内存按可用容量大小划分为两等份，每次只使用其中的一块，当一块用完了，就将存活的对象复制到另一块上，再把已使用的这块内存空间一次性清理掉，这就解决了内存碎片的问题；缺点同样很明显，内存的使用率缩减到原来的一半
+3. Mark-Compact（标记-整理）算法：
 
 
 
