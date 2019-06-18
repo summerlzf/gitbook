@@ -73,6 +73,10 @@ JVM将堆分为新生代（Young Generation）和老年代（Old Generation）�
 
 老年代的GC算法，主要是Mark-Sweep和Mark-Compact算法
 
+- Minor GC：清理新生代内存空间
+- Major GC：清理老年代内存空间
+- Full GC：清理整个堆空间——包括新生代和老年代
+
 
 
 # Java动态代理和cglib实现
