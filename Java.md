@@ -57,7 +57,7 @@ volatile和synchronized都可以保证多线程操作的【有序性】，volati
 
 堆（Heap）是JVM进行垃圾回收的主要场所，其次的场所是方法区
 
-JVM将堆分为新生代（Young Generation）和老年代（Old Generation），而新生代又分为：Eden区、From Survivor区、To Survivor区，Eden区占据较大的内存区域；当GC发生时，会将Eden和From Survivor中存活的对象复制到To Survivor区，然后清理Eden和From Survivor区
+JVM将堆分为新生代（Young Generation）和老年代（Old Generation），而新生代又分为：Eden区、From Survivor区、To Survivor区，Eden区占据较大的内存区域，Eden、From Survivor、To Survivo的内存占据比例是 8:1:1；当GC发生时，会将Eden和From Survivor中存活的对象复制到To Survivor区，然后清理Eden和From Survivor区
 
 - 新生代（Young Generation）：所有新创建的对象都是用新生代分配内存，Eden空间不足时，会触发Minor GC，把存活对象转移到Survivor中去
 - 老年代（Old Generation）：用于存放经过多次Minor GC后依然存活的对象，这些对象有存活时间长、比较稳定等特点
