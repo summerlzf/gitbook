@@ -30,7 +30,10 @@ public User getUser(String id) {
 
 如果此时传递一个数据库必然不存在的用户id（如：“0”），那么每次查询必然落到数据库上，因为缓存中也一定不存在对应key（用户id）的值，这就是<u>缓存穿透</u>，恶意攻击者可以利用这个漏洞发起密集请求，进而压垮数据库。
 
-如何解决这个问题，最简单有效的方法是：缓存空值，也就是即便数据库查询不出来（查询出来的是空值），我们同样写入到缓存，只是缓存的超时时间可以设置相对较短，具体可见如下修改后的代码
+如何解决这个问题，业内较为成熟的解决方案有两种：
+
+- 布隆过滤器（Bloom Filter）：类似于哈希表的算法，将所有可能的查询条件生成一个bitmap，在进行数据库查询之前使用这个bitmap进行过滤，从而减轻数据库层面的压力
+- 空值缓存：也就是即便数据库查询不出来（查询出来的是空值），我们同样写入到缓存，只是缓存的超时时间可以设置相对较短，具体可见如下修改后的代码
 
 ```java
 /**
@@ -64,4 +67,38 @@ public User getUser(String id) {
 
 ### 缓存击穿
 
-指一个key非常热点，大量集中的请求都落到这一个点上，当这个key在失效的瞬间，持续的大量请求穿过缓存，直接抵达数据库，对数据库构成瞬间的压力
+指一个key非常热点，大量集中的并发请求都落到这一个点上，当这个key在失效的瞬间，大量高并发请求穿过缓存，直接抵达数据库，对数据库构成瞬间的压力
+
+解决方法：使用互斥锁实现对数据库的单例访问，具体可见如下的代码实现
+
+```java
+static Lock lock = new ReentrantLock();
+
+public List<String> getData() {
+    // 从缓存中读取数据
+    List<String> result = getDataFromCache();
+    if (result.isEmpty()) {
+        // 尝试获取锁
+        if (lock.tryLock()) {
+            try {
+                // 从数据库获取数据
+                result = getDataFromDB();
+                // 写入缓存
+                setDataToCache(result);
+            } finally {
+                // 释放锁
+                lock.unlock();
+            }
+        } else {
+            // 没有获取到锁，再查一下缓存
+            result = getDataFromCache();
+            if(result.isEmpty()) {
+                Thread.sleep(100);
+                // 重试
+                return getData();
+            }
+        }
+    }
+    return result;
+}
+```

@@ -82,11 +82,15 @@ JVM将堆分为新生代（Young Generation）和老年代（Old Generation）�
 # Java动态代理和cglib实现
 
 JDK动态代理：通过接口中的方法名，在动态生成的代理类中调用业务实现类的同名方法
+
 cglib实现：通过继承业务类，生成的动态代理类是业务类的子类，通过重写业务方法进行代理
 
 
 
-# HashMap
+# 关于HashMap
 
-HashMap是无序的
-Map的有序实现类：TreeMap、LinkedHashMap
+HashMap是无序的，Map的有序实现类：TreeMap、LinkedHashMap
+
+JDK7或更早的版本中，HashMap是通过 数组+链表 实现的；但在JDK8以后，HashMap是通过 数组+链表或红黑树 实现的
+
+在JDK8中，底层的数据结构依然是数组，数组中的元素，如果元素个数不超过8个，那么存储的是链表结构，超过8个以后，将会被转换为红黑树存储结构。链表是不利于查找/寻址的，在最差的情况下，也就是所有key的hash值都一样的时候，时间复杂度会退化到O(n)；红黑树是自平衡的二叉查找树，是对链表可能会很长时查找的优化，即便在最差的情况下，其时间复杂度也只有O(log n)
