@@ -109,3 +109,23 @@ Java中的线程池，可通过 Executors 提供的静态方法进行创建
 | newCachedThreadPool()       | 创建一个可缓存线程池，若无空闲线程，会自动创建新线程（不断增长） |
 | newWorkStealingPool()       | 创建一个抢占式的线程池，属于并行的线程池，JDK8中新引入的     |
 
+事实上，大部分静态方法创建线程池，都是通过 `ThreadPoolExecutor` 的构造方法创建的
+
+```java
+// Java线程池的完整构造函数
+public ThreadPoolExecutor(
+    int corePoolSize, // 线程池长期维持的线程数，即使线程处于idle状态，也不会回收
+    int maximumPoolSize, // 线程数的上限
+    long keepAliveTime, // 超过corePoolSize的线程的idle时长，超过这个时间，多余线程会被回收
+    TimeUnit unit, // 时间单位
+    BlockingQueue<Runnable> workQueue, // 任务的排队队列
+    ThreadFactory threadFactory, // 新线程的产生方式
+    RejectedExecutionHandler handler // 拒绝策略
+)
+```
+
+其中有4个参数比较容易引起问题
+
+- corePoolSize 和 maximumPoolSize 设置不当会影响效率，甚至耗尽线程
+- workQueue 设置不当容易导致OOM
+- handler 设置不当会导致提交任务时抛出异常
