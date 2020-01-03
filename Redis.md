@@ -1,3 +1,14 @@
+# 认识Redis
+
+Redis（Remote Dictionary Server，远程字典服务）是一个开源的使用ANSI C语言编写的高性能key-value存储系统，有以下特点：
+
+- 遵守BSD协议
+- 支持网络
+- 可基于内存也可持久化到磁盘
+- 提供多种语言的API
+
+
+
 # Redis的5种数据结构
 
 - String：字符串，可以是整数或者浮点数
