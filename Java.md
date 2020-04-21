@@ -129,3 +129,30 @@ public ThreadPoolExecutor(
 - corePoolSize 和 maximumPoolSize 设置不当会影响效率，甚至耗尽线程
 - workQueue 设置不当容易导致OOM
 - handler 设置不当会导致提交任务时抛出异常
+
+
+
+# 过滤器（Filter）和拦截器（Interceptor）
+
+相同点：二者都是AOP编程思想的体现，都能实现权限检查、日志记录等
+
+不同点（如下表）：
+
+|                 | 过滤器（Filter）                         | 拦截器（Interceptor）                                    |
+| --------------- | ---------------------------------------- | -------------------------------------------------------- |
+| 原理            | 依赖于servlet容器，实现上基于函数回调    | 依赖于web框架（如：SpringMVC），实现上基于Java的反射机制 |
+| 使用范围        | 遵循servlet规范，只能用于web程序中       | 基于框架，可用于web、application和swing程序中            |
+| 生命周期        | 一个过滤器实例只能在容器初始化时调用一次 | 一个拦截器实例可以在controller生命周期内多次调用         |
+| 请求作用范围    | 几乎对所有请求都起作用                   | 只能对controller请求起作用                               |
+| 对IOC容器的访问 | 无法获取                                 | 可以获取IOC容器中的各个bean对象                          |
+| 触发时机        | 在请求进入容器后，进入servlet之前触发    | 在请求进入servlet之后，进入controller之前触发            |
+
+请求进入顺序：
+
+- web容器（如：tomcat）
+  - Filter
+    - Servlet
+      - Interceptor
+        - Controller
+
+过滤器只能在servlet前后起作用，而拦截器能够深入到controller方法前后、异常抛出前后等，具有更大的弹性，因此，在Spring框架中，优先使用拦截器
