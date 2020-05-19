@@ -28,3 +28,21 @@
 Dubbo：一个提供服务治理的RPC框架
 
 SpringCloud：微服务架构下的一整套解决方案
+
+
+
+# @SpringBootApplication注解
+
+除了四个元注解（@Target，@Retation，@Documented，@Inherited）外，还包括以下几个重要的注解：
+
+#### @SpringBootConfiguration
+
+继承自@Configuration，二者功能基本一致，标注当前类为Spring IOC容器的配置类，并将当前类内使用@Bean注解标记的方法实例纳入到IOC容器中，实例名就是方法名
+
+#### @EnableAutoConfiguration
+
+启动自动配置，借助@Import注解，将所有符合自动配置条件的bean定义加载到IOC容器
+
+#### @ComponentScan
+
+默认扫描当前包及其子包下所有符合条件的组件或者bean定义（@Service、@Component、@Repository、@Controller等），并将其加载到IOC容器中；可通过指定basePackages属性指定扫描的范围
